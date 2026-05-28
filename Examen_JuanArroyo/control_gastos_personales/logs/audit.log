@@ -1,0 +1,22 @@
+{"timestamp":"2026-05-28T17:01:39.847-05:00","level":"INFO","message":"Servidor de Control de Gastos en puerto 5000"}
+{"timestamp":"2026-05-28T17:03:21.263-05:00","level":"INFO","message":"Evento QUERY registrado en Event Manager"}
+{"timestamp":"2026-05-28T17:03:21.263-05:00","level":"INFO","message":"Listado de gastos: 0 registros"}
+{"timestamp":"2026-05-28T17:03:46.294-05:00","level":"INFO","message":"Evento CREATE registrado en Event Manager"}
+{"timestamp":"2026-05-28T17:03:46.294-05:00","level":"INFO","message":"Gasto creado id=1"}
+{"timestamp":"2026-05-28T17:03:46.307-05:00","level":"INFO","message":"Evento QUERY registrado en Event Manager"}
+{"timestamp":"2026-05-28T17:03:46.307-05:00","level":"INFO","message":"Listado de gastos: 1 registros"}
+{"timestamp":"2026-05-28T17:07:53.954-05:00","level":"INFO","message":"Servidor de Control de Gastos en puerto 5000"}
+{"timestamp":"2026-05-28T17:07:54.027-05:00","level":"INFO","message":"Evento QUERY registrado en Event Manager"}
+{"timestamp":"2026-05-28T17:07:54.028-05:00","level":"INFO","message":"Listado de gastos: 0 registros"}
+{"timestamp":"2026-05-28T17:07:54.794-05:00","level":"INFO","message":"Evento QUERY registrado en Event Manager"}
+{"timestamp":"2026-05-28T17:07:54.794-05:00","level":"INFO","message":"Listado de gastos: 0 registros"}
+{"timestamp":"2026-05-28T17:07:55.657-05:00","level":"INFO","message":"Evento QUERY registrado en Event Manager"}
+{"timestamp":"2026-05-28T17:07:55.658-05:00","level":"INFO","message":"Listado de gastos: 0 registros"}
+{"timestamp":"2026-05-28T17:08:11.244-05:00","level":"INFO","message":"Evento CREATE registrado en Event Manager"}
+{"timestamp":"2026-05-28T17:08:11.245-05:00","level":"INFO","message":"Gasto creado id=1"}
+{"timestamp":"2026-05-28T17:08:11.275-05:00","level":"INFO","message":"Evento QUERY registrado en Event Manager"}
+{"timestamp":"2026-05-28T17:08:11.275-05:00","level":"INFO","message":"Listado de gastos: 1 registros"}
+{"timestamp":"2026-05-28T17:08:25.966-05:00","level":"INFO","message":"Evento UPDATE registrado en Event Manager"}
+{"timestamp":"2026-05-28T17:08:25.966-05:00","level":"INFO","message":"Gasto actualizado id=1"}
+{"timestamp":"2026-05-28T17:08:25.978-05:00","level":"INFO","message":"Evento QUERY registrado en Event Manager"}
+{"timestamp":"2026-05-28T17:08:25.978-05:00","level":"INFO","message":"Listado de gastos: 1 registros"}

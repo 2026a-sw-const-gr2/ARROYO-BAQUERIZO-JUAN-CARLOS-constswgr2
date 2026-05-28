@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: Control de Gastos Personales API
+  description: CRUD de gastos con autenticación por API key (FIS EPN).
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+security:
+  - FisApiKey: []
+components:
+  securitySchemes:
+    FisApiKey:
+      type: apiKey
+      in: header
+      name: X-FIS-EPN-KEY
+  schemas:
+    Gasto:
+      type: object
+      properties:
+        id:
+          type: integer
+        descripcion:
+          type: string
+          maxLength: 200
+        monto:
+          type: number
+          minimum: 0.01
+        categoria:
+          type: string
+          enum: [Comida, Transporte, Educación, Salud, Otros]
+    GastoInput:
+      type: object
+      required: [descripcion, monto]
+      properties:
+        descripcion:
+          type: string
+        monto:
+          type: number
+        categoria:
+          type: string
+        id:
+          type: integer
+          description: Opcional; no debe duplicar un id existente
+paths:
+  /health:
+    get:
+      summary: Estado del servicio
+      security: []
+      responses:
+        '200':
+          description: OK
+  /gastos:
+    get:
+      summary: Listar gastos
+      responses:
+        '200':
+          description: Lista de gastos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gasto'
+        '401':
+          description: API key inválida
+    post:
+      summary: Crear gasto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GastoInput'
+      responses:
+        '201':
+          description: Creado
+        '400':
+          description: Datos inválidos
+        '409':
+          description: ID duplicado
+  /gastos/{gasto_id}:
+    parameters:
+      - name: gasto_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Obtener gasto por ID
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: No encontrado
+    put:
+      summary: Actualizar gasto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GastoInput'
+      responses:
+        '200':
+          description: Actualizado
+        '404':
+          description: No encontrado
+    delete:
+      summary: Eliminar gasto
+      responses:
+        '200':
+          description: Eliminado
+        '404':
+          description: No encontrado

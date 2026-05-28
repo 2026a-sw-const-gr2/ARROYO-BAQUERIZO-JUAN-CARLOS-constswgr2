@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Gastos Personales</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { max-width: 800px; margin-top: 50px; }
+        .card { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">Gestión de Gastos Personales</h2>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Agregar / Editar Gasto</h5>
+                <form id="gasto-form">
+                    <input type="hidden" id="gasto-id">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <input type="text" id="descripcion" class="form-control" placeholder="Descripción" required>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" id="monto" class="form-control" placeholder="Monto" step="0.01" required>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="categoria" class="form-select">
+                                <option value="Comida">Comida</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Educación">Educación</option>
+                                <option value="Salud">Salud</option>
+                                <option value="Otros">Otros</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Listado de Gastos</h5>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gastos-tbody">
+                        <!-- Se llena con JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/gastos';
+        const FIS_API_KEY = {{ fis_api_key|tojson }};
+
+        function apiHeaders(extra = {}) {
+            return {
+                'Content-Type': 'application/json',
+                'X-FIS-EPN-KEY': FIS_API_KEY,
+                ...extra
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', loadGastos);
+
+        document.getElementById('gasto-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('gasto-id').value;
+            const data = {
+                descripcion: document.getElementById('descripcion').value,
+                monto: parseFloat(document.getElementById('monto').value),
+                categoria: document.getElementById('categoria').value
+            };
+
+            if (id) {
+                await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: apiHeaders(),
+                    body: JSON.stringify(data)
+                });
+            } else {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    headers: apiHeaders(),
+                    body: JSON.stringify(data)
+                });
+            }
+
+            resetForm();
+            loadGastos();
+        });
+
+        async function loadGastos() {
+            const resp = await fetch(API_URL, { headers: apiHeaders() });
+            const gastos = await resp.json();
+            const tbody = document.getElementById('gastos-tbody');
+            tbody.innerHTML = '';
+            gastos.forEach(g => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${g.descripcion}</td>
+                    <td>$${g.monto.toFixed(2)}</td>
+                    <td>${g.categoria}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" onclick="editGasto(${g.id}, '${g.descripcion}', ${g.monto}, '${g.categoria}')">Editar</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteGasto(${g.id})">Eliminar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function editGasto(id, desc, monto, cat) {
+            document.getElementById('gasto-id').value = id;
+            document.getElementById('descripcion').value = desc;
+            document.getElementById('monto').value = monto;
+            document.getElementById('categoria').value = cat;
+        }
+
+        async function deleteGasto(id) {
+            if (confirm('¿Eliminar gasto?')) {
+                await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE',
+                    headers: apiHeaders()
+                });
+                loadGastos();
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('gasto-id').value = '';
+            document.getElementById('gasto-form').reset();
+        }
+    </script>
+</body>
+</html>
